@@ -1,0 +1,21 @@
+# Defaults. Each environment file overrides only what differs.
+# This is exactly the job values-test.yaml / values-uat.yaml do for TMS.
+
+image:
+  repository: nginx
+  tag: "1.27-alpine"      # <- the immutable artifact reference
+
+replicaCount: 2           # <- how many copies the Deployment keeps alive
+
+appVersion: "v1"          # <- shown on the page, so you can SEE a deploy land
+
+ingress:
+  host: test.lab.localhost
+
+resources:
+  limits:
+    cpu: 200m             # 200 millicores = one fifth of one CPU core. A CEILING.
+    memory: 128Mi
+  requests:
+    cpu: 10m              # what the scheduler RESERVES. Not the same thing.
+    memory: 32Mi

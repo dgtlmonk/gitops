@@ -1,0 +1,24 @@
+# This is the whole GitOps contract, in 20 lines.
+# It says: "namespace lab-uat must always equal this chart + this values file
+# at the HEAD of this git repo." ArgoCD then enforces that, forever.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lab-uat
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: REPO_URL_GOES_HERE      # setup-gitops.sh fills this in
+    targetRevision: main
+    path: charts/demo-web
+    helm:
+      valueFiles:
+        - values-uat.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lab-uat
+  syncPolicy:
+    automated:
+      prune: true      # delete things you removed from git
+      selfHeal: true   # THIS is what undoes your kubectl edits

@@ -1,0 +1,20 @@
+# UAT. YOUR TURN — see README Lesson 4.
+#
+# Real TMS has values-test.yaml / values-uat.yaml / values-prod.yaml, and the
+# difference between them IS the environment. Deciding what belongs here is a
+# real design call, not busy work:
+#
+#   - replicaCount  : is UAT meant to survive a pod dying mid-demo?
+#   - appVersion    : should UAT run ahead of TEST, or behind it?
+#   - resources     : does UAT deserve the same ceiling as TEST?
+#
+# Trade-off to weigh: every value you copy in here is a value that can DRIFT
+# from TEST. Every value you leave out inherits from values.yaml and can never
+# drift. Fewer overrides = fewer "works in TEST, broken in UAT" surprises.
+#
+# Fill in below. host must stay unique or the two ingresses collide.
+
+ingress:
+  host: uat.lab.localhost
+
+# TODO(you): add the 2-3 keys you think should differ, and nothing more.

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-web
+spec:
+  # The Deployment's whole job: keep this many pods alive, forever.
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-web
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-web
+    spec:
+      containers:
+        - name: web
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 80
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          # Writes a page showing the version AND which pod answered.
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              cat > /usr/share/nginx/html/index.html <<HTML
+              <html><body style="font-family:system-ui;padding:3rem">
+              <h1>demo-web {{ .Values.appVersion }}</h1>
+              <p>served by pod: <code>$HOSTNAME</code></p>
+              <p>namespace: <code>{{ .Release.Namespace }}</code></p>
+              </body></html>
+              HTML
+              exec nginx -g 'daemon off;'
