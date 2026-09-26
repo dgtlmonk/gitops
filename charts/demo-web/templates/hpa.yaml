@@ -1,0 +1,29 @@
+{{- if .Values.autoscaling.enabled }}
+# HorizontalPodAutoscaler: watches CPU use, changes the Deployment's replica count.
+# NOTE: when this is on, the Deployment must NOT set `replicas` itself, or the two
+# fight forever — HPA scales up, ArgoCD self-heal puts it back. See deployment.yaml.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Release.Name }}-web
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Release.Name }}-web
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          # percent of the pod's CPU *request*, not its limit.
+          averageUtilization: {{ .Values.autoscaling.targetCPUPercent }}
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0      # react immediately, so the lab is watchable
+    scaleDown:
+      stabilizationWindowSeconds: 60     # wait a minute before shrinking
+{{- end }}

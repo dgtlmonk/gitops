@@ -3,8 +3,11 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-web
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   # The Deployment's whole job: keep this many pods alive, forever.
+  # Omitted entirely when the HPA is on — whoever owns `replicas` must own it alone.
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-web

@@ -19,3 +19,12 @@ resources:
   requests:
     cpu: 10m              # what the scheduler RESERVES. Not the same thing.
     memory: 32Mi
+
+autoscaling:
+  enabled: false          # TEST turns this on; UAT leaves it off, for contrast
+  minReplicas: 2
+  maxReplicas: 8
+  targetCPUPercent: 50    # scale up once average CPU passes 50% of `requests.cpu`
+
+service:
+  type: ClusterIP         # ClusterIP | LoadBalancer

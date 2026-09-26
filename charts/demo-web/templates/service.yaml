@@ -4,6 +4,9 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-web
 spec:
+  # ClusterIP = internal only. LoadBalancer = ask the cloud for a public IP.
+  # On kind that request is answered by cloud-provider-kind, running on your Mac.
+  type: {{ .Values.service.type }}
   selector:
     app: {{ .Release.Name }}-web     # <- finds pods by LABEL, not by IP
   ports:
