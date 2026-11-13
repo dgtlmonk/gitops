@@ -18,3 +18,5 @@ ingress:
   host: uat.lab.localhost
 
 # TODO(you): add the 2-3 keys you think should differ, and nothing more.
+appVersion: "v1"
+appAuthor: "Joel"

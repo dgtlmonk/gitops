@@ -32,6 +32,8 @@ spec:
               <h1>demo-web {{ .Values.appVersion }}</h1>
               <p>served by pod: <code>$HOSTNAME</code></p>
               <p>namespace: <code>{{ .Release.Namespace }}</code></p>
+              <p>author: <code>{{ .Values.appAuthor }}</code></p>
+
               </body></html>
               HTML
               exec nginx -g 'daemon off;'

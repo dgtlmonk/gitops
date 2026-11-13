@@ -1,6 +1,7 @@
 # TEST. Overrides only what differs from charts/demo-web/values.yaml.
 replicaCount: 2
 appVersion: "v2"
+appAuthor: "Joel"
 ingress:
   host: test.lab.localhost
 
